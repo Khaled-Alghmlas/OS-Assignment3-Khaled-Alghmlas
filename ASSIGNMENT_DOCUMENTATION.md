@@ -1,8 +1,8 @@
 # Assignment 3 - Complete Documentation
 
-**Student Name**: [Your Full Name]  
-**Student ID**: [Your ID]  
-**Date Submitted**: [Submission Date]
+**Student Name**: [خالد ابراهيم الغملاس]  
+**Student ID**: [445050235]  
+**Date Submitted**: [May 3rd, 2026]
 
 ---
 
@@ -73,17 +73,18 @@ Did some stress-tests to verify the 56 log entries without crashes and confirmed
 90 minutes
 ---
 
-### Entry 3 - [Date, Time]
+### Entry 3 - [May 3, 2026, 7:51 PM]
 **What I implemented**: 
-
+Finsihed Task 3: Integrated a binary Semaphore (cpuSemaphore) in SharedResources and solved all remaining questions
 **Challenges encountered**: 
-
+Mismatching curly braces caused compilation errors, also trying to solve the questions while being very tired
 **How I solved it**: 
-
+Corrected the syntax and also drank a ton of coffee!
 **Testing approach**: 
-
+Monitored the terminal output to confirm that all the progress bars never overlap while executing.
 **Time spent**: 
 
+120 minutes
 ---
 
 ### Entry 4 - [Date, Time]
@@ -139,7 +140,7 @@ these variables are shared and they must stay consistent. However regarding sema
 
 **Your Answer**:
 
-[Your answer here - reference try-finally blocks, lock ordering, etc.]
+A deadlock is a stiuation where two thread or more are blocked indefinietly because every thread awaits a resource that is held by another one which creates a circle/cycle that stops everything, One of the techniques is lock ordering where you can only acquired one resource so no cycles can appear, The other technique is Try-Finally where every lock is followed by a finally block which releases the resource lock. When i placed the .unlock() and .release() inside the finally I make sure every permit is 100% guarnteed to be released
 
 ---
 
