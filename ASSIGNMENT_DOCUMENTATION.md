@@ -264,17 +264,16 @@ This forces the process to run sequentially, so it'll prevent progress bars from
 **What I tested**: Running program multiple times to verify consistent results
 
 **Testing procedure**: 
-```bash
-# Commands used (run the program at least 5 times)
-```
+I ran the program 5 times to check for consistency.
 
 **Results**: 
 (Show that running multiple times produces consistent, correct results)
-
+After running it 5 times, the Total log entries remained the same which is ( 56 entries ) and the Total waiting time did not change.
 **Why synchronization is necessary**: 
 (Explain what race conditions COULD occur without synchronization, even if you didn't observe them. Explain which shared resources need protection and why.)
-
+Without any synchronization a race condition could occur on the contextSwitchCount bacause count++ is not an atomic procedure, so two threads can overwrite one another, leading to a lower total than the real event.
 **Conclusion**: 
+The implementation is stable and is deterministic so it produces the exact same results regardless of scheudling order.
 
 ---
 
@@ -282,32 +281,35 @@ This forces the process to run sequentially, so it'll prevent progress bars from
 **What I tested**: Checking for ConcurrentModificationException
 
 **Testing procedure**: 
-
-**Results**: 
+I monitored the terminal for stack traces during the high-intensity execution phases, specifically when multiple processes were yielding and adding to the executionLog simultaneously.
+**Results**: Zero exceptions where thrown. 
 
 **What this proves**: 
+This proves that the ReentrantLock in SharedResources is successfully serializing the access to the ArrayyList, by forcing the threads to wait their turn to call .add(), we prevent the internal state of the list from being corrupted during concurrent modifications.
 
 ---
 
 ### Test 3: Correctness Verification
 **What I tested**: Verifying correct final values (total burst time, context switches, etc.)
 
-**Expected values**: 
+**Expected values**: Based on my ID (445050235), the expected total burst time would be the sum of the generated bursted, and the processes completed should be 5.
 
 **Actual values**: 
+Processes completed = 5, Context Switches = 18, Total Log Entries = 56.
 
 **Analysis**: 
+The actual values perfectly match the expected values, so it means no data was lost during thread execution.
 
 ---
 
 ### Test 4: Different Scenarios
-**Scenario tested**: [e.g., different time quantum, more processes, etc.]
+**Scenario tested**: Decrease the time quantum from 100ms to 50ms.
 
-**Purpose**: 
+**Purpose**: So that we increase the frequency of context switches and put more stress on the ReentrantLock and Semaphore to see if synchornization holds up under higher pressure.
 
 **Results**: 
-
-**What I learned**: 
+The number of context switches more than doubles
+**What I learned**: Smaller time quantums improve responsiveness, but they greatly increase the overhead of the work done by the CPU, so finding the balance is important.
 
 ---
 
