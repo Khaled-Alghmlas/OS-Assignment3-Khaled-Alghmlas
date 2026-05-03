@@ -14,16 +14,15 @@
 > Set sharing to "Anyone with the link can view".
 > Test the link in incognito/private mode before submitting.
 
-**Video Link**: [Paste your personal Gmail Google Drive link here]
-
-**Video filename**: `[YourStudentID]_Assignment3_Synchronization.mp4`
+**Video Link**: (https://drive.google.com/drive/folders/19Ksss2Do9StC9CxXSvJu-cFIDW8r_1nJ?usp=sharing)
+**Video filename**: `445050235_Assignment3_Synchronization.mp4`
 
 **Verification**:
-- [ ] Link is accessible (tested in incognito mode)
-- [ ] Video is 3-5 minutes long
-- [ ] Video shows code walkthrough and commits
-- [ ] Video has clear audio
-- [ ] Uploaded to PERSONAL Gmail (not @std.psau.edu.sa)
+- [ ✔ ] Link is accessible (tested in incognito mode)
+- [ ✔ ] Video is 3-5 minutes long
+- [ ✔ ] Video shows code walkthrough and commits
+- [ ✔ ] Video has clear audio
+- [ ✔ ] Uploaded to PERSONAL Gmail (not @std.psau.edu.sa)
 
 ---
 
@@ -317,7 +316,7 @@ The number of context switches more than doubles
 
 ### What I learned about synchronization:
 
-[6-8 sentences about key concepts, challenges, insights]
+This project showed me that multi-threading is messy without clear rules, I learned that shared variables like counters are easily corrupted when multiple threads "race" to update them at the same time, Using a ReentrantLock taught me how to keep data consistent, while the Semaphore taught me how to manage a limited resource like the CPU, The biggest headache was fixing nested try-catch blocks and avoiding deadlocks where the code just freezes, I realized that using finally is the best way to make sure locks always open, even if the code crashes, Now I see that synchronization is the only thing keeping apps from crashing or losing data when doing many tasks at once, It’s all about balancing safety with speed so the program stays fast but accurate.
 
 ---
 
@@ -325,44 +324,46 @@ The number of context switches more than doubles
 
 Give TWO examples where synchronization is critical:
 
-**Example 1**: 
+**Example 1**: Banking apps: if two people withdraw money from one account at the same time. Synchronization ensures the balance updates correctly so that the bank doesn't lose any money.
 
-**Example 2**: 
+**Example 2**: Gaming servers: in multiplayer games, synchronization makes sure that when two people grab the same item, the server only gives it to the one who got there first so no duplication can occur.
 
 ---
 
 ### How I would explain synchronization to others:
+Think of a shared phone charger in a room. if five people grab the cable at once, the cable snaps, and that is a race condition.
 
-[Explain to someone who just finished Assignment 1 - use simple terms and analogies]
+Synchronization is the one at a time rule, you grab the "cable" which is lock() and then no one can use it until you're done with it, and when you're done you "put it back" unlock(), if you keep the cable even after fullt charging, everyone else's phone stay dead, and that's a deadlock, These are the rules to keep the counters in a CPU from breaking.
 
 ---
 
 ## Part 6: GitHub Repository Information
 
 **Repository URL**: 
-
+https://github.com/Khaled-Alghmlas/OS-Assignment3-Khaled-Alghmlas
 **Number of commits**: 
-
+13
 **Commit messages**: 
-1. 
-2. 
-3. 
-4. 
+1. Set my student ID: 445050235
+2. Completed Task (2): Add ReentrantLock to protect execution log
+3. Log entry 2 completed, and Q1 & Q2 answered
+4. Completed Task (3): : Added Semaphore to control concurrent CPU access
 
 ---
 
 ## Summary
 
 **Total time spent on assignment**: 
-
+6 hours approximately
 **Key takeaways**: 
-1. 
-2. 
-3. 
+1. Learned that shared variables are easily corrupted wthout synchronization
+2. Understood how to simulated a single-core CPU by using a binary semaphore.
+3. R 
 
 **Most challenging aspect**: 
-
+Trying to solve complex logic and fixing logical and compilation errors while being exhausted, which made finding small mistakes much more difficult
 **What I'm most proud of**: 
+Successfully getting the simulation to run smoothly with zero crashes and genuinely comprehending Synchronization.
 
 ---
 
