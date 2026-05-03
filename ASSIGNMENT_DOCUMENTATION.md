@@ -162,52 +162,99 @@ I used one lock (coarse-grained) for all of my counters to simplify the logic an
 
 ### Critical Section #1: Counter Variables
 
-**Which variables**: 
+**Which variables**: ContextSwitchCount, completedProcesses, totalWaitingTime.
 
 **Why they need protection**: 
-
+These variables are susceptible to the read-write-modify problem, so they need protection because if one increments before the other, it will lead to incorrect final results.
 **Synchronization mechanism used**: 
-
+Reentrant Lock
 **Code snippet**:
 ```java
-// Paste your implementation here
+public static void incrementContextSwitch() {
+        // TODO: Protect this critical section with a lock
+        // RACE CONDITION: Multiple threads might read and write simultaneously!
+        lock.lock(); // Locking to ensure only one thread can modify contextSwitchCount at a time
+        try {
+            contextSwitchCount++; // Task 1: Increment context switch count safely
+        } finally {
+            lock.unlock();
+        }
+    }
 ```
 
 **Justification**: 
+ReentrantLock gives mutual exclusion whish ensures only one thread can modify the counter at one time.
 
 ---
 
 ### Critical Section #2: Execution Log
 
-**What resource**: 
+**What resource**: ArrayList<String> executionLog
 
 **Why it needs protection**: 
-
+ArrayList is not thread safe, so concurrent calls to add() would lead to ConcurrentModificationException or data loss during array resizing.
 **Synchronization mechanism used**: 
-
+ReentrantLock
 **Code snippet**:
 ```java
-// Paste your implementation here
+public static void logExecution(String message) {
+        // TODO: Protect this critical section with a lock
+        // RACE CONDITION: ArrayList is not thread-safe!
+        lock.lock(); // Locking to ensure only one thread can modify executionLog at a time
+        try {
+            executionLog.add(message); // Task 2: Add log entry safely
+        } finally { // Always unlock in finally block to prevent deadlocks
+            lock.unlock();
+        }
+    }
 ```
 
 **Justification**: 
+Using the same lock as the counters ( which is coarse-grained locking ) it simplifies the design and ensures the shared log remians consistent and without curroption during high-frequency updates.
 
 ---
 
 ### Critical Section #3: CPU Semaphore
 
-**Purpose of semaphore**: 
+**Purpose of semaphore**: To simulate a CPU with only one core by blocking proccess from running simultaneously.
 
 **Number of permits and why**: 
-
+only 1 permit which creates a binary semaphore which sort of acts like a mutex ( mutual exclusion ) guard, it ensures only a single process can run its quantum at any moment.
 **Where implemented**: 
-
+I defined it in the SharedResources class, and implemented it inside run() and runToCompletion() of the Process class.
 **Code snippet**:
 ```java
-// Paste your implementation here
+public void runToCompletion() {
+        // TODO: Similar synchronization needed here
+
+        try {
+            SharedResources.cpuSemaphore.acquire(); // Task 3: Acquire semaphore to run to completion
+            try {
+                System.out.println(Colors.BRIGHT_CYAN + "  ⚡ " + Colors.BOLD + Colors.CYAN + name + 
+                                  Colors.RESET + Colors.BRIGHT_CYAN + " is the last process, running to completion" + 
+                                  Colors.RESET + " [" + remainingTime + "ms]");
+                Thread.sleep(remainingTime);
+                remainingTime = 0;
+                completionTime = System.currentTimeMillis();
+                	
+                long waitingTime = (completionTime - creationTime) - burstTime;
+                SharedResources.addWaitingTime(waitingTime);
+                SharedResources.incrementCompletedProcess();
+                
+                System.out.println(Colors.BRIGHT_GREEN + "  ✓ " + Colors.BOLD + Colors.CYAN + name + 
+                                  Colors.RESET + Colors.BRIGHT_GREEN + " finished execution!" + Colors.RESET);
+                System.out.println();
+            } finally {
+                SharedResources.cpuSemaphore.release(); // Task 3: Release semaphore after running to completion
+            }
+        } catch (InterruptedException e) {
+            System.out.println(Colors.RED + "  ✗ " + name + " was interrupted." + Colors.RESET);
+        }
+    }
 ```
 
 **Effect on program behavior**: 
+This forces the process to run sequentially, so it'll prevent progress bars from overlapping in the terminal and makes sure the simulation resembles that of a single-processor system.
 
 ---
 
